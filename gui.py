@@ -1,4 +1,5 @@
 import tkinter as tk
+import time
 from protocol import e91protocol
 
 
@@ -52,9 +53,31 @@ class App(tk.Frame):
         self.seed = tk.IntVar()
         self.seed_field["textvariable"] = self.seed
 
-        tk.Button(text="RUN", command=self.run).grid(column=0, row=4, sticky=tk.W)
+        self.run_bttn = tk.Button(text="RUN", command=self.run)
+        self.run_bttn.grid(column=0, row=4, sticky=tk.W)
+
+        tk.Label(text="RESLUTS").grid(column=0, row=5, sticky=tk.W)
+        self.result_frm = tk.Frame()
+        self.result_frm.grid(column=0, row=6, sticky=tk.W)
+
+        tk.Label(master=self.result_frm, text="key: ").grid(column=0, row=0)
+        self.key_field = tk.Entry(master=self.result_frm)
+        self.key_field.grid(column=1, row=0)
+        self.key = tk.IntVar()
+        self.key_field["textvariable"] = self.key
+
+        tk.Label(master=self.result_frm, text="delta s: ").grid(column=0, row=1)
+        self.delta_s_field = tk.Entry(master=self.result_frm)
+        self.delta_s_field.grid(column=1, row=1)
+        self.delta_s = tk.IntVar()
+        self.delta_s_field["textvariable"] = self.delta_s
 
     def run(self):
+        self.run_bttn.destroy()
+        time.sleep(1)  # function call te protocol
+        tk.Label(text="done.").grid(column=0, row=4, sticky=tk.W)
+        self.key.set("PLACEHOLDER KEY")
+        self.delta_s.set(0.1)
         print(f"Interface ip: {self.interface_ip.get()}:{self.interface_port.get()}\n"
               f"Target ip: {self.target_ip.get()}:{self.target_port.get()}\n"
               f"E91 length: {self.length.get()}\nE91 seed: {self.seed.get()}")
