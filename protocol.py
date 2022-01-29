@@ -1,6 +1,3 @@
-import random
-
-
 def establish_connection():  # True = Adam, False = Bob
     return True
 
@@ -53,8 +50,4 @@ def e91protocol(bit_string_length, seed, rand_gen):
     for d in zip(decoy, other_decoy):
         s += (1 if d[0] == d[1] else -1)
     s = s/len(decoy)
-    return s, key
-
-
-if __name__ == "__main__":
-    e91protocol(20, 103942, random)
+    return s+2*(2**0.5), key
