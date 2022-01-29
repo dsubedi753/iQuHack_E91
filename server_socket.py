@@ -4,15 +4,9 @@ from _thread import *
 import random
 
 
-def get_reply(data):
-    # Stubb function for reply
-    basis = pickle.loads(data)
-    print(repr(basis))
-    return 'Server Says: Hello'
-
 def get_result(basis):
-    # Stubb function for result
     print(basis.decode('utf-8'))
+    # Stubb function for result
     return str(random.choice([0,1]))
 
 

@@ -16,9 +16,7 @@ def establish_connection():  # True = Adam, False = Bob
 
 
 def q_send_basis(basis):
-    # Pickles the array and sends to int server
     ClientSocket.send(str.encode(str(basis)))
-
 
 
 def q_receive_result():
@@ -28,28 +26,35 @@ def q_receive_result():
 
 
 def c_send_basis(basis_arr):
-    # PSocket.send(pickle.dumps(basis_arr))))
-    pass
+    # Pickles the array and sends to int server
+    PSocket.send(pickle.dumps(basis_arr))
 
 
 def c_receive_basis():
-    # data = PSocket.recv(4096)
-    # basis = pickle.loads(data)
-    return []
-
-
-def c_receive_decoy():
-    return []
-
+    basis_arr = pickle.loads(PSocket.recv(4096))
+    print(repr(basis_arr))
+    return basis_arr
 
 def c_send_decoy(decoy):
-    pass
+    PSocket.send(pickle.dumps(decoy))
+
+def c_receive_decoy():
+    decoy = pickle.loads(PSocket.recv(4096))
+    print(repr(decoy))
+    return decoy
 
 
 def p2p_server():
-    pass
+    try:
+        PSocket.bind((host_p, port_p))
+    except socket.error as e:
+        print(str(e))
 
 def p2p_client():
+    try:
+        PSocket.connect((host_p, port_p))
+    except socket.error as e:
+        print(str(e))
     pass
 
 
@@ -96,9 +101,29 @@ if __name__ == "__main__":
     host_p = '127.0.0.1'
     port_p = 1234
     
-    establish_connection()
+    role = establish_connection()
+    
+    if role:
+        p2p_server()
+    else:
+        p2p_client()
+        
     q_send_basis(1)
     q_receive_result()
+    
+    if role:
+        c_send_basis([1,0,1])
+    else:
+        c_send_basis([0,1,1])
+
+    c_receive_basis()
+
+    if role:
+        c_send_decoy([0,0,1,0,1,1])
+    else:
+        c_send_decoy([0,0,0,1,0,1])
+
+    c_receive_decoy()
     
     # while True:
     #     Input = input('Say Something: ')
