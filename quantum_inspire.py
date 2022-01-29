@@ -24,12 +24,8 @@ circuit = QuantumCircuit(q, b)
 circuit.h(q[0])
 circuit.cx(q[0], q[1])
 
-qi_job = execute(circuit, backend=qi_backend, shots=256)
+qi_job = execute(circuit, backend=qi_backend, shots=1)
 qi_result = qi_job.result()
 histogram = qi_result.get_counts(circuit)
 print('\nState\tCounts')
-[print('{0}\t\t{1}'.format(state, counts)) for state, counts in histogram.items()]
-# Print the full state probabilities histogram
-probabilities_histogram = qi_result.get_probabilities(circuit)
-print('\nState\tProbabilities')
-[print('{0}\t\t{1}'.format(state, val)) for state, val in probabilities_histogram.items()]
+[print('{0}\t{1}'.format(state, counts)) for state, counts in histogram.items()]
