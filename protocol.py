@@ -52,14 +52,18 @@ def q_accept_user(server_socket, accept):
 
 
 def send_own_ip(server_socket):
-    server_socket.send(str(own_ip()).encode())
+    print("sending IP")
+    server_socket.send(str.encode(own_ip()))
 
 
 def receive_ip(server_socket):
-    server_socket.recv(1024).decode("utf-8")
+    recv = server_socket.recv(1024).decode("utf-8")
+    print(recv)
+    return recv
 
 
 def c_establish_connection(client_addr, own_addr, role):
+    print("establishing connection")
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         if role:
@@ -67,13 +71,14 @@ def c_establish_connection(client_addr, own_addr, role):
             while True:
                 client_socket.listen(1)
                 connection, address = client_socket.accept()
+                print(connection)
                 if address != client_addr:
                     connection.close()
                 else:
                     break
                 return connection, client_socket
         else:
-            client_socket.connect((client_addr[0], PORT,))
+            client_socket.connect(client_addr)
             return client_socket, None
     except socket.error as e:
         print(str(e))
@@ -81,7 +86,6 @@ def c_establish_connection(client_addr, own_addr, role):
 
 def send_arr(connection, arr):
     print(arr)
-    print(pickle.dumps(arr))
     connection.sendall(pickle.dumps(arr))
 
 
