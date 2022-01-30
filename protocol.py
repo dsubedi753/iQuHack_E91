@@ -77,7 +77,7 @@ def e91protocol(bit_string_length, seed, rand_gen, server_socket, role, client_a
     basis_arr = []
     for _ in range(bit_string_length):
         basis_arr.append(rand_gen.choice([0, 1, 2] if role else [1, 2, 3]))
-    send_arr((client_addr, server_socket,), basis_arr)
+    send_arr(server_socket, (client_addr, basis_arr,))
     results_arr = receive_arr(server_socket)
     connection, client_socket = c_establish_connection(client_addr, (own_ip(), PORT), role)
     if role:
