@@ -1,5 +1,6 @@
 import socket
 import pickle
+import json
 
 
 PORT = 1234
@@ -12,16 +13,19 @@ def own_ip():
 def q_establish_connection(server_addr):  # True = Adam, False = Bob
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
+        pass
         server_socket.connect(server_addr)
-        print("yeah yeah")
     except socket.error as e:
         print(str(e))
-    role = int(server_socket.recv(1024).decode('utf-8')) == 1
-    return server_socket, role
+    return server_socket
 
 
 def q_update(server_socket):
-    return
+    server_socket.send(str.encode("list"))
+    client_list = list(json.loads(server_socket.recv(4096).decode()).values())
+    server_socket.send(str.encode("requests"))
+    requests = None
+    return client_list, requests
 
 
 def q_choose_user(server_socket, client_addr):
