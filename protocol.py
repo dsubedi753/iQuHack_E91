@@ -97,7 +97,7 @@ def e91protocol(bit_string_length, seed, rand_gen, server_socket, role, client_a
     send_arr(server_socket, (client_addr, basis_arr,))
     results_arr = receive_arr(server_socket)
     send_own_ip(server_socket)
-    client_addr = (receive_ip(), PORT,)
+    client_addr = (receive_ip(server_socket), PORT,)
     connection, client_socket = c_establish_connection(client_addr, (own_ip(), PORT), role)
     if role:
         send_arr(connection, basis_arr)
