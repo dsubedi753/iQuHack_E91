@@ -59,13 +59,14 @@ class App(tk.Frame):
         self.connect_bttn.grid(column=0, row=2, sticky=tk.W)
 
     def connect_to_interface(self):
-        self.server_socket = protocol.q_establish_connection((self.interface_ip.get(),
-                                                                         self.interface_port.get(),))
+        self.server_socket, own_addr = protocol.q_establish_connection((self.interface_ip.get(),
+                                                                        self.interface_port.get(),))
         self.upper_text.config(text="SELECT PARTNER")
         self.connect_bttn.destroy()
         self.interface_frm.destroy()
         self.connection_frm = tk.Frame()
         self.connection_frm.grid(column=0, row=1, sticky=tk.W)
+        tk.Label(master=self.connection_frm, text=f"your IP: {own_addr[0]}:{own_addr[1]}")
         self.client_list = tk.Listbox(master=self.connection_frm, selectmode=tk.SINGLE)
         self.client_list.grid(column=0, row=0, sticky=tk.W)
         button_frm = tk.Frame(master=self.connection_frm)
@@ -88,8 +89,8 @@ class App(tk.Frame):
                 app.draw_parameter_screen()
                 popup.destroy()
 
-            tk.Button(popup, text="accept", command=lambda: accept(self)).pack(side=tk.LEFT, fill=tk.X)
-            tk.Button(popup, text="refuse", command=lambda: popup.destroy()).pack(side=tk.RIGHT, fill=tk.X)
+            tk.Button(popup, text="accept", command=lambda: accept(self)).pack(side=tk.LEFT, fill=tk.BOTH)
+            tk.Button(popup, text="refuse", command=lambda: popup.destroy()).pack(side=tk.RIGHT, fill=tk.BOTH)
 
         else:
             self.client_list.delete(0, tk.END)

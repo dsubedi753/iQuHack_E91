@@ -1,6 +1,6 @@
 import socket
 import pickle
-import json
+import ipaddress
 
 
 PORT = 1234
@@ -10,34 +10,33 @@ def own_ip():
     return socket.gethostbyname(socket.gethostname())
 
 
-def q_establish_connection(server_addr):  # True = Adam, False = Bob
+def q_establish_connection(server_addr):
+    try:
+        ipaddress.ip_address(server_addr[0])
+        ip = server_addr[0]
+    except ValueError:
+        ip = socket.gethostbyname(server_addr[0])
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         pass
-        server_socket.connect(server_addr)
+        server_socket.connect((ip, server_addr[1]))
+        own_addr = pickle.load(server_socket.recv(4096).decode())
     except socket.error as e:
+        own_addr = None
         print(str(e))
-    return server_socket
+    return server_socket, own_addr
 
 
 def q_update(server_socket):
     server_socket.send(str.encode("list"))
-    client_list = list(json.loads(server_socket.recv(4096).decode()).values())
-    server_socket.send(str.encode("requests"))
+    client_list = pickle.load(server_socket.recv(4096).decode())
+    server_socket.send(str.encode("request"))
     requests = None
     return client_list, requests
 
 
 def q_choose_user(server_socket, client_addr):
     pass
-
-
-def q_send_basis(server_socket, basis):
-    server_socket.send(str.encode(str(basis)))
-
-
-def q_receive_result(server_socket):
-    return int(server_socket.recv(1024).decode('utf-8')) == 1
 
 
 def c_establish_connection(client_addr, own_addr, role):
@@ -60,28 +59,27 @@ def c_establish_connection(client_addr, own_addr, role):
         print(str(e))
 
 
-def c_send_arr(connection, arr):
+def send_arr(connection, arr):
     connection.send(pickle.dumps(arr))
 
 
-def c_receive_arr(connection):
+def receive_arr(connection):
     return pickle.loads(connection.recv(4096))
 
 
 def e91protocol(bit_string_length, seed, rand_gen, server_socket, role, client_addr):
     rand_gen.seed(seed)
     basis_arr = []
-    results_arr = []
     for _ in range(bit_string_length):
         basis_arr.append(rand_gen.choice([0, 1, 2] if role else [1, 2, 3]))
-        q_send_basis(server_socket, basis_arr[-1])
-        results_arr.append(q_receive_result(server_socket))
+    send_arr(server_socket, basis_arr)
+    results_arr = receive_arr(server_socket)
     connection, client_socket = c_establish_connection(client_addr, (own_ip(), PORT), role)
     if role:
-        c_send_arr(connection, basis_arr)
-    other_basis_arr = c_receive_arr(connection)
+        send_arr(connection, basis_arr)
+    other_basis_arr = receive_arr(connection)
     if not role:
-        c_send_arr(connection, basis_arr)
+        send_arr(connection, basis_arr)
     key = []
     decoy = []
     for (basis, other, result) in zip(basis_arr, other_basis_arr, results_arr):
@@ -90,10 +88,10 @@ def e91protocol(bit_string_length, seed, rand_gen, server_socket, role, client_a
         else:
             decoy.append(result)
     if role:
-        c_send_arr(connection, decoy)
-    other_decoy = c_receive_arr(connection)
+        send_arr(connection, decoy)
+    other_decoy = receive_arr(connection)
     if not role:
-        c_send_arr(connection, decoy)
+        send_arr(connection, decoy)
     connection.close()
     if role:
         client_socket.close()
