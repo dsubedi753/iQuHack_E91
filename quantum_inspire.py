@@ -7,7 +7,7 @@ from math import pi
 from quantuminspire.credentials import enable_account
 
 
-enable_account('YOUR_API_TOKEN')
+enable_account('be6bdb84086d8b8cd1e69004f23717299b7d15b7')
 
 QI_URL = os.getenv('API_URL', 'https://api.quantum-inspire.com/')
 
