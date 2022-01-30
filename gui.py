@@ -1,6 +1,7 @@
 import tkinter as tk
 import time
 from protocol import e91protocol
+import random
 
 
 class App(tk.Frame):
@@ -74,13 +75,12 @@ class App(tk.Frame):
 
     def run(self):
         self.run_bttn.destroy()
-        time.sleep(1)  # function call te protocol
+        s_delta, key = e91protocol(self.length.get(), self.seed.get(), random,
+                                   (self.interface_ip.get(), self.interface_port.get(),),
+                                   (self.target_ip.get(), self.target_port.get(),))
         tk.Label(text="done.").grid(column=0, row=4, sticky=tk.W)
-        self.key.set("PLACEHOLDER KEY")
-        self.delta_s.set(0.1)
-        print(f"Interface ip: {self.interface_ip.get()}:{self.interface_port.get()}\n"
-              f"Target ip: {self.target_ip.get()}:{self.target_port.get()}\n"
-              f"E91 length: {self.length.get()}\nE91 seed: {self.seed.get()}")
+        self.key.set(key)
+        self.delta_s.set(s_delta)
 
 
 root = tk.Tk()
