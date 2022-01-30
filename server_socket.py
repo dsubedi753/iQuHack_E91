@@ -1,49 +1,47 @@
-import socket, pickle
-import json
+import pickle
+import socket
 from _thread import *
-import random
+
 import quantum_inspire
 
-def get_IP(connection):
-    connection.sendall(pickle.dumps(list(clientID.values())));
+
+def get_ip(connection):
+    connection.sendall(pickle.dumps(list(clientID.values())))
+
 
 def send_req(address, requester, connection):
-    # requester_id = clientID[requester][0] +":"+ str(clientID[requester][1])
     found = False
-    # print(address[0])
-    # print(address[1])
-    # print("requester: " + requester_id)
     for key, value in clientID.items():
         if str(value[0]) == str(address[0]) and str(value[1]) == str(address[1]):
             found = True
             reqDict[key] = clientID[requester]
             break
-    # Send back confirmation
     if found:
-        connection.sendall(str.encode("Request Sent to " + address[0] + ":"+str(address[1])))
+        connection.sendall(str.encode("sent"))
     else:
-        connection.sendall(str.encode("Not Found"))
+        connection.sendall(str.encode("error"))
+
 
 def get_req(connection, cl_num):
     connection.sendall(pickle.dumps(reqDict[cl_num]))
     reqDict[cl_num] = None
     ans = connection.recv(1024).decode("utf-8")
     ans = ans[:5] == "accept"
-    address = ans[7:].split(":")
+    client_address = ans[7:].split(":")
     for key, value in clientID.items():
-        if str(value[0]) == str(address[0]) and str(value[1]) == str(address[1]):
+        if str(value[0]) == str(client_address[0]) and str(value[1]) == str(client_address[1]):
             if ans:
-                clientDict[key].sendall(str.encode("Connection accepted"))
+                clientDict[key].sendall(str.encode("accepted"))
             else:
-                clientDict[key].sendall(str.encode("Connection rejected"))
+                clientDict[key].sendall(str.encode("rejected"))
             break
     
 
 def del_client(cl_num):
     clientID.pop(cl_num)
 
+
 def threaded_client(connection, cl_num):
-    # connection.send(str.encode(str(cl_num)))
     while True:
         data = connection.recv(1024)
         if not data:
@@ -54,7 +52,7 @@ def threaded_client(connection, cl_num):
             dat = data.decode('utf-8')
             # List the connected computers
             if dat == "list":
-                get_IP(connection)
+                get_ip(connection)
             # Check for any requests
             if dat == "request":
                 get_req(connection, cl_num)
@@ -63,18 +61,14 @@ def threaded_client(connection, cl_num):
                 target_add = dat[5:]
                 send_req(target_add.split(":"), cl_num, connection)
         except e:
-            address , a_basis = pickle.loads(data)
+            client_address, basis_0 = pickle.loads(data)
             for key, value in clientID.items():
                 if str(value[0]) == str(address[0]) and str(value[1]) == str(address[1]):
-                    _, b_basis = piscle(clientDict[key].recv(1024))
-                    break            
-            alice_measure, bob_measure = quantum_inspire.run_qi(a_basis, b_basis)
-            connection.sendall(pickle.dumps(a_basis))
-            clientDict[key].sendall(pickle.dumps(b_basis))
-            # reply = get_result(data)
-            # connection.sendall(str.encode(reply))
-
-
+                    _, basis_1 = pickle.loads(clientDict[key].recv(1024))
+                    measure_0, measure_1 = quantum_inspire.run_qi(basis_0, basis_1)
+                    connection.sendall(pickle.dumps(measure_0))
+                    clientDict[key].sendall(pickle.dumps(measure_1))
+                    break
     connection.close()
 
 
@@ -106,6 +100,3 @@ if __name__ == "__main__":
         start_new_thread(threaded_client, (Client,ThreadCount, ))
         print('Thread Number: ' + str(ThreadCount))
     ServerSocket.close()
-
-
-    
