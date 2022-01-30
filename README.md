@@ -34,9 +34,16 @@ which is based on Bell's theorem to check, whether the communication was secure.
 ## Our Network
 Our Network let's users connect to an interface server, which matches Users, who want to communicate. They then send their basis to the server. The interface server contacts the Quantum Hardware via QuTech. The connection between user and server has to be assumed to be secure, since the protocol is only as secure as it's weakest link. This communication tries to emulate the transfer of entangled bits to the users through a quantum channel. Sadly due to current limitations this is the only way to do implement something similar on Quantum Hardware and in turn it is not viable in pratice yet.
 
-## Installation and Runnning of project
+## Installation and Uses
 
 ### Dependencies 
 - [Python](https://www.python.org/downloads/)
 - [Qiskit](https://qiskit.org/)
 - [Quantum Inspire](https://github.com/QuTech-Delft/quantuminspire#installation)
+
+### Installaiton 
+`git clone https://github.com/thunder753/iQuHack_E91.git`
+
+### Running
+
+- 
