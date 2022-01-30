@@ -92,10 +92,14 @@ def e91protocol(bit_string_length, seed, rand_gen, server_addr, client_addr):
 
 
 if __name__ == '__main__':
-    server_socket = q_establish_connection(('127.0.0.1', 1233))
+    server_socket = q_establish_connection(('localhost', 1233))
+    # server_socket = q_establish_connection(('3.22.53.161', 14826))
     server_socket.send(str.encode("list"))
     ips = json.loads(server_socket.recv(4096).decode())
     print(ips)
     while True:
-        q_send_basis(server_socket, input("Enter Basis: "))
+        x =  input("Enter Basis: ")
+        if x == "q":
+            break
+        q_send_basis(server_socket, x)
         print(q_receive_result(server_socket))

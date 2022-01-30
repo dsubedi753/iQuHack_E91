@@ -17,7 +17,7 @@ authentication = get_authentication()
 QI.set_authentication(authentication, QI_URL, project_name=project_name)
 qi_backend = QI.get_backend('QX single-node simulator')
 
-def run_qi(alice_bases, bob_bases)
+def run_qi(alice_bases, bob_bases):
     alice_measure = []
     bob_measure = []
 
