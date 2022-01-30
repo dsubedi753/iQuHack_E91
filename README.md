@@ -16,7 +16,7 @@ basis used as well as some parts of the sent key.
 
 ### E91
 E91 was another Algorithm proposed for secure transmission of a key using a combination of a quantum and classical channel.
-It uses works by sending two entangled particles (we'll use ![equation](https://latex.codecogs.com/svg.image?%5Cinline%20%7C%5Cpsi%5Crangle=%5Cfrac%7B1%7D%7B%5Csqrt%7B2%7D%7D(%7C01%5Crangle&plus;%7C10%5Crangle))) 
+It uses works by sending two entangled particles (we'll use ![equation](https://latex.codecogs.com/svg.image?%5Cinline%20%7C%5Cpsi%5Crangle=%5Cfrac%7B1%7D%7B%5Csqrt%7B2%7D%7D(%7C00%5Crangle&plus;%7C11%5Crangle))) 
 to both Alice and Bob and measuring them in random basis. Alice can measure in the normal z-basis of ![equation](https://latex.codecogs.com/svg.image?%5Cinline%20%5C%7B%7C0%5Crangle,%20%7C1%5Crangle%5C%7D) 
 (called ![equation](https://latex.codecogs.com/svg.image?%5Cinline%20a_1)) as well as that basis rotated by ![equation](https://latex.codecogs.com/svg.image?%5Cinline%20%5Cfrac%7B1%7D%7B4%7D%5Cpi) (![equation](https://latex.codecogs.com/svg.image?%5Cinline%20a_2)) and ![equation](https://latex.codecogs.com/svg.image?%5Cinline%20%5Cfrac%7B1%7D%7B2%7D%5Cpi) (![equation](https://latex.codecogs.com/svg.image?%5Cinline%20%5Cfrac%7B1%7D%7B2%7D%5Cpi)) around the y-axis. 
 Bob can measure in the z-basis rotated aroundd the y-axis by ![equation](https://latex.codecogs.com/svg.image?%5Cinline%20%5Cfrac%7B1%7D%7B4%7D%5Cpi) (![equation](https://latex.codecogs.com/svg.image?%5Cinline%20b_1)), ![equation](https://latex.codecogs.com/svg.image?%5Cinline%20%5Cfrac%7B1%7D%7B2%7D%5Cpi) (![equation](https://latex.codecogs.com/svg.image?%5Cinline%20b_2)) 
