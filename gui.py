@@ -1,5 +1,4 @@
 import tkinter as tk
-import time
 from protocol import e91protocol
 import random
 
@@ -75,9 +74,12 @@ class App(tk.Frame):
 
     def run(self):
         self.run_bttn.destroy()
+        running_label = tk.Label(text="running...")
+        running_label.grid(column=0, row=4, sticky=tk.W)
         s_delta, key = e91protocol(self.length.get(), self.seed.get(), random,
                                    (self.interface_ip.get(), self.interface_port.get(),),
                                    (self.target_ip.get(), self.target_port.get(),))
+        running_label.destroy()
         tk.Label(text="done.").grid(column=0, row=4, sticky=tk.W)
         self.key.set(key)
         self.delta_s.set(s_delta)

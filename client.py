@@ -2,7 +2,6 @@ import socket, pickle
 import random
 
 
-
 def establish_connection():  # True = Adam, False = Bob
     print('Waiting for connection')
     try:
@@ -35,8 +34,10 @@ def c_receive_basis():
     print(repr(basis_arr))
     return basis_arr
 
+
 def c_send_decoy(decoy):
     PSocket.send(pickle.dumps(decoy))
+
 
 def c_receive_decoy():
     decoy = pickle.loads(PSocket.recv(4096))
@@ -49,6 +50,7 @@ def p2p_server():
         PSocket.bind((host_p, port_p))
     except socket.error as e:
         print(str(e))
+
 
 def p2p_client():
     try:
@@ -89,7 +91,6 @@ def e91protocol(bit_string_length, seed, rand_gen):
         s += (1 if d[0] == d[1] else -1)
     s = s/len(decoy)
     return s, key
-
 
 
 if __name__ == "__main__":
