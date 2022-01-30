@@ -11,7 +11,7 @@ def get_result(basis):
     return str(random.choice([0,1]))
 
 def get_IP(connection):
-    connection.sendall(str.encode(json.dumps(clientID)))
+    connection.sendall(pickle.dumps(list(clientID.values())));
 
 def send_req(address, requester):
     requester_id = clientID[requester][0] +":"+ str(clientID[requester][1])
@@ -20,15 +20,14 @@ def send_req(address, requester):
     print(address[1])
     print("requester: " + requester_id)
     for key, value in clientID.items():
-        if value[0] == address[0] and value[1] == address[1]:
+        if str(value[0]) == str(address[0]) and str(value[1]) == str(address[1]):
             found = True
-            reqDict[key] = requester_id
+            reqDict[key] = clientID[requester]
             break
-    if found:
-        print("Req sent")
-    else:
-        print("Not found")
 
+def get_req(connection, cl_num):
+    connection.sendall(pickle.dumps(reqDict[cl_num]))
+    reqDict[cl_num] = None
 
 def del_client(cl_num):
     clientID.pop(cl_num)
@@ -40,25 +39,27 @@ def threaded_client(connection, cl_num):
         if not data:
             del_client(cl_num)
             break
+
         data = data.decode('utf-8')
         if data == "list":
-            print("here")
             get_IP(connection)
-        if "request" in data:
-            target_add = data[8:]
+        if data == "request":
+            get_req(connection, cl_num)
+        if "reqs" in data:
+            target_add = data[5:]
             send_req(target_add.split(":"), cl_num)
         else:
-            reply = get_result(data)
-            connection.sendall(str.encode(reply))
+            pass
+            # reply = get_result(data)
+            # connection.sendall(str.encode(reply))
 
-        if reqDict[cl_num] is not None:
-            connection.sendall(str.encode("req " + reqDict[cl_num]))
-            reqDict[cl_num] = None
+
     connection.close()
 
 
 if __name__ == "__main__":
     ServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    ServerSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     host = 'localhost'
     port = 1233
     ThreadCount = 0
