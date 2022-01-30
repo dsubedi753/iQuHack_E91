@@ -23,7 +23,7 @@ def send_req(address, requester, connection):
 
 
 def get_req(connection, cl_num):
-    connection.send(pickle.dumps(reqDict[cl_num]))
+    connection.sendall(pickle.dumps(reqDict[cl_num]))
     if reqDict[cl_num] is not None:
         ans = connection.recv(1024).decode("utf-8")
         acc = ans == "accept"
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     while True:
         Client, address = ServerSocket.accept()
         print('Connected to: ' + address[0] + ':' + str(address[1]))
-        Client.send(pickle.dumps((address[0], address[1],)))
+        Client.sendall(pickle.dumps((address[0], address[1],)))
         ThreadCount += 1
         clientID[ThreadCount] = (address[0], address[1], )
         reqDict[ThreadCount] = None
