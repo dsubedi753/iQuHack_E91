@@ -30,20 +30,27 @@ def q_establish_connection(server_addr):
 def q_update(server_socket):
     server_socket.send(str.encode("request"))
     requests = pickle.loads(server_socket.recv(4096))
-    server_socket.send(str.encode("list"))
-    client_list = pickle.loads(server_socket.recv(4096))
-    return client_list, requests
+    if requests is not None:
+        return [], requests
+    else:
+        server_socket.send(str.encode("list"))
+        client_list = pickle.loads(server_socket.recv(4096))
+        return client_list, None
 
 
 def q_choose_user(server_socket, client_addr):
     server_socket.send(f"reqs {client_addr[0]}:{client_addr[1]}".encode())
-    if server_socket.recv(1024).decode() == "error":
+    recv = server_socket.recv(1024).decode()
+    print(recv)
+    if recv == "error":
         raise(Exception("unknown Error"))
-    return server_socket.recv(1024).decode() == "accepted"
+    recv = server_socket.recv(1024).decode()
+    print(recv)
+    return recv == "accepted"
 
 
 def q_accept_user(server_socket, client_addr, accept):
-    server_socket.send(f"{'accept' if accept else 'refuse'} {client_addr[0]}:{client_addr[1]}".encode())
+    server_socket.send(f"{'accept' if accept else 'refuse'}".encode())
 
 
 def c_establish_connection(client_addr, own_addr, role):

@@ -23,15 +23,14 @@ def send_req(address, requester, connection):
 
 
 def get_req(connection, cl_num):
-    connection.sendall(pickle.dumps(reqDict[cl_num]))
+    connection.send(pickle.dumps(reqDict[cl_num]))
     if reqDict[cl_num] is not None:
-        reqDict[cl_num] = None
         ans = connection.recv(1024).decode("utf-8")
-        ans = ans[:5] == "accept"
-        client_address = ans[7:].split(":")
+        print(ans)
+        acc = ans == "accept"
         for key, value in clientID.items():
-            if str(value[0]) == str(client_address[0]) and str(value[1]) == str(client_address[1]):
-                if ans:
+            if str(value[0]) == str(reqDict[cl_num][0]) and str(value[1]) == str(reqDict[cl_num][1]):
+                if acc:
                     clientDict[key].sendall(str.encode("accepted"))
                 else:
                     clientDict[key].sendall(str.encode("rejected"))
@@ -61,7 +60,7 @@ def threaded_client(connection, cl_num):
             if "reqs " in dat:
                 target_add = dat[5:]
                 send_req(target_add.split(":"), cl_num, connection)
-        except e:
+        except ValueError:
             client_address, basis_0 = pickle.loads(data)
             for key, value in clientID.items():
                 if str(value[0]) == str(address[0]) and str(value[1]) == str(address[1]):
