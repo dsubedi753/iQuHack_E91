@@ -54,6 +54,16 @@ Our Network let's users connect to an interface server, which matches Users, who
 4. Choose from one of the other clients to send the request
 5. After request is accepted, keys can be generated with given parameters
 
+<details><summary>Screenshots</summary>
+<p>
+
+![gui](https://user-images.githubusercontent.com/55018955/151708177-01a280ca-e866-460c-bc40-590c5ccfa216.png)
+![gui2](https://user-images.githubusercontent.com/55018955/151708223-36f54448-dcda-4c70-9ab3-09f5cf9a07e4.png)
+
+
+</p>
+</details>
+
 ## References
 
 - 
