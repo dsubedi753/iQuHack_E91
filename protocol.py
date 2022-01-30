@@ -5,16 +5,27 @@ import pickle
 PORT = 1234
 
 
-def q_establish_connection(server_addr, client_addr):  # True = Adam, False = Bob
+def own_ip():
+    return socket.gethostbyname(socket.gethostname())
+
+
+def q_establish_connection(server_addr):  # True = Adam, False = Bob
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         server_socket.connect(server_addr)
         print("yeah yeah")
     except socket.error as e:
         print(str(e))
-    server_socket.send(str.encode(f"{client_addr[0]}:{client_addr[1]}"))
     role = int(server_socket.recv(1024).decode('utf-8')) == 1
     return server_socket, role
+
+
+def q_update(server_socket):
+    return
+
+
+def q_choose_user(server_socket, client_addr):
+    pass
 
 
 def q_send_basis(server_socket, basis):
@@ -53,8 +64,7 @@ def c_receive_arr(connection):
     return pickle.loads(connection.recv(4096))
 
 
-def e91protocol(bit_string_length, seed, rand_gen, server_addr, client_addr):
-    server_socket, role = q_establish_connection(server_addr, client_addr)
+def e91protocol(bit_string_length, seed, rand_gen, server_socket, role, client_addr):
     rand_gen.seed(seed)
     basis_arr = []
     results_arr = []
@@ -62,8 +72,7 @@ def e91protocol(bit_string_length, seed, rand_gen, server_addr, client_addr):
         basis_arr.append(rand_gen.choice([0, 1, 2] if role else [1, 2, 3]))
         q_send_basis(server_socket, basis_arr[-1])
         results_arr.append(q_receive_result(server_socket))
-    connection, client_socket = c_establish_connection(client_addr, (socket.gethostbyname(socket.gethostname()), PORT),
-                                                       role)
+    connection, client_socket = c_establish_connection(client_addr, (own_ip(), PORT), role)
     if role:
         c_send_arr(connection, basis_arr)
     other_basis_arr = c_receive_arr(connection)
@@ -73,7 +82,7 @@ def e91protocol(bit_string_length, seed, rand_gen, server_addr, client_addr):
     decoy = []
     for (basis, other, result) in zip(basis_arr, other_basis_arr, results_arr):
         if basis == other:
-            key.append(result)
+            key.append(result if role else (not result))
         else:
             decoy.append(result)
     if role:
