@@ -28,7 +28,6 @@ def run_qi(alice_bases, bob_bases):
 
         circuit.h(q[0])
         circuit.cx(q[0], q[1])
-        #circuit.x(q[1])
 
         if alice_bases[i] == 0:
             circuit.ry(-pi/2,q[0])
@@ -39,8 +38,8 @@ def run_qi(alice_bases, bob_bases):
         elif bob_bases[i] == 3:
             circuit.ry(pi/4,q[1])
 
-        #circuit.measure(q[0], b[0])
-        #circuit.measure(q[1], b[1])
+        circuit.measure(q[0], b[0])
+        circuit.measure(q[1], b[1])
 
         job = execute(circuit, backend=qi_backend, shots=1)
         result = job.result().get_counts(circuit)
