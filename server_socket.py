@@ -67,10 +67,10 @@ def threaded_client(connection, cl_num):
                     measure_0, measure_1 = quantum_inspire.run_qi(basis_0, basis_1)
                     connection.sendall(pickle.dumps(measure_0))
                     clientDict[key].sendall(pickle.dumps(measure_1))
-                    actual_ip_0 = connection.recv(1024)
-                    actual_ip_1 = clientDict[key].recv(1024)
-                    connection.sendall(actual_ip_1)
-                    clientDict[key].sendall(actual_ip_0)
+                    actual_ip_0 = connection.recv(1024).decode('utf-8')
+                    actual_ip_1 = clientDict[key].recv(1024).decode('utf-8')
+                    connection.sendall(str.encode(actual_ip_1))
+                    clientDict[key].sendall(str.encode(actual_ip_0))
                     break
     connection.close()
 
