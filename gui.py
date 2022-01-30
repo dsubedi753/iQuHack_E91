@@ -1,6 +1,7 @@
 import tkinter as tk
 import protocol
 import random
+from tkinter import messagebox
 
 
 class App(tk.Frame):
@@ -87,10 +88,15 @@ class App(tk.Frame):
                 app.role = False
                 app.client_addr = connection_req
                 app.draw_parameter_screen()
+                protocol.q_accept_user(app.server_socket, app.client_addr, True)
+                popup.destroy()
+
+            def refuse(app):
+                protocol.q_accept_user(app.server_socket, app.client_addr, False)
                 popup.destroy()
 
             tk.Button(popup, text="accept", command=lambda: accept(self)).pack(side=tk.LEFT, fill=tk.BOTH)
-            tk.Button(popup, text="refuse", command=lambda: popup.destroy()).pack(side=tk.RIGHT, fill=tk.BOTH)
+            tk.Button(popup, text="refuse", command=lambda: refuse(self)).pack(side=tk.RIGHT, fill=tk.BOTH)
 
         else:
             self.client_list.delete(0, tk.END)
@@ -99,9 +105,13 @@ class App(tk.Frame):
 
     def choose_user(self):
         if len(self.client_list.curselection()) != 0:
-            self.role = True
-            self.client_addr = self.client_addr_list[self.client_list.curselection()[0]]
-            self.draw_parameter_screen()
+            addr = self.client_addr_list[self.client_list.curselection()[0]]
+            if protocol.q_choose_user(self.server_socket, addr):
+                self.role = True
+                self.client_addr = addr
+                self.draw_parameter_screen()
+            else:
+                messagebox.showinfo(title="Connection Refused", message="The chosen client has refused the connection")
 
     def draw_parameter_screen(self):
         self.connection_frm.destroy()

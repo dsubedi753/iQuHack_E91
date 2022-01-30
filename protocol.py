@@ -20,7 +20,7 @@ def q_establish_connection(server_addr):
     try:
         pass
         server_socket.connect((ip, server_addr[1]))
-        own_addr = pickle.load(server_socket.recv(4096).decode())
+        own_addr = pickle.loads(server_socket.recv(4096))
     except socket.error as e:
         own_addr = None
         print(str(e))
@@ -29,15 +29,19 @@ def q_establish_connection(server_addr):
 
 def q_update(server_socket):
     server_socket.send(str.encode("list"))
-    client_list = pickle.load(server_socket.recv(4096).decode())
+    client_list = pickle.loads(server_socket.recv(4096))
     server_socket.send(str.encode("request"))
-    requests = pickle.load(server_socket.recv(4096).decode())
-    requests = None if requests[0] is None else requests
+    requests = pickle.loads(server_socket.recv(4096))
     return client_list, requests
 
 
 def q_choose_user(server_socket, client_addr):
-    pass
+    server_socket.send(f"reqs {client_addr[0]}:{client_addr[1]}".encode())
+    return server_socket.recv(1024).decode() == "accept"
+
+
+def q_accept_user(server_socket, client_addr, accept):
+    server_socket.send(f"{'accept' if accept else 'refuse'} {client_addr[0]}:{client_addr[1]}".encode())
 
 
 def c_establish_connection(client_addr, own_addr, role):
@@ -73,7 +77,7 @@ def e91protocol(bit_string_length, seed, rand_gen, server_socket, role, client_a
     basis_arr = []
     for _ in range(bit_string_length):
         basis_arr.append(rand_gen.choice([0, 1, 2] if role else [1, 2, 3]))
-    send_arr(server_socket, basis_arr)
+    send_arr((client_addr, server_socket,), basis_arr)
     results_arr = receive_arr(server_socket)
     connection, client_socket = c_establish_connection(client_addr, (own_ip(), PORT), role)
     if role:
