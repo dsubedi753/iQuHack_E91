@@ -3,9 +3,11 @@ Distributing Crypto Keys with QuTech hardware and an interface server
 # Background
 
 ### Quantum Key Distribution
+
+Suppose that User 1 wants to send a message to User 2. In order to protect the information in the message from the mediator, it must be encrypted. Encryption is the process of encoding the plaintext into ciphertext.The strength of encryption, that is, the property to resist decryption, is determined by its algorithm. Any encryption algorithm is based on the use of a key. Almost all contemporary encryption schemes rely on prime factorization, and Shor's algorithm can perform Prime factorization very efficiently, so this could lead to large security issue so for overcoming this a new way of encryption introduced called Quantum Key Distribution that uses Quantum Cryptograpy for the  encryption. 
+
 Quantum Key Distribution uses the property of Quantum states collapsing the ability to measure in different basis 
 to securely send a key, using a quantum and a classical channel, that can be used to communicate using the common encryption (like aes256) algorithms.
-
 It achieves this by sending the key encoded in random basis and then, after the qubits have been measured, releasing the basis used as well as some parts of the sent key.
 
 ### E91
