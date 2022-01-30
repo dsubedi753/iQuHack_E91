@@ -89,7 +89,7 @@ def e91protocol(bit_string_length, seed, rand_gen, server_socket, role, client_a
     decoy = []
     for (basis, other, result) in zip(basis_arr, other_basis_arr, results_arr):
         if basis == other:
-            key.append(result)
+            key.append((result if role else not result))
         else:
             decoy.append(result)
     if role:
