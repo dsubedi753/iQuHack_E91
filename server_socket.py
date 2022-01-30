@@ -4,14 +4,6 @@ from _thread import *
 import random
 import quantum_inspire
 
-
-def get_result(basis):
-    print(basis)
-    # Stubb function for result
-    quantum_inspire.run_qi()
-
-    return str(random.choice([0,1]))
-
 def get_IP(connection):
     connection.sendall(pickle.dumps(list(clientID.values())));
 
@@ -58,19 +50,27 @@ def threaded_client(connection, cl_num):
             del_client(cl_num)
             break
         
-        data = data.decode('utf-8')
-        # List the connected computers
-        if data == "list":
-            get_IP(connection)
-        # Check for any requests
-        if data == "request":
-            get_req(connection, cl_num)
-        # Make request
-        if "reqs" in data:
-            target_add = data[5:]
-            send_req(target_add.split(":"), cl_num, connection)
-        else:
-            pass
+        try:
+            dat = data.decode('utf-8')
+            # List the connected computers
+            if dat == "list":
+                get_IP(connection)
+            # Check for any requests
+            if dat == "request":
+                get_req(connection, cl_num)
+            # Make request
+            if "reqs" in dat:
+                target_add = dat[5:]
+                send_req(target_add.split(":"), cl_num, connection)
+        except e:
+            address , a_basis = pickle.loads(data)
+            for key, value in clientID.items():
+                if str(value[0]) == str(address[0]) and str(value[1]) == str(address[1]):
+                    _, b_basis = piscle(clientDict[key].recv(1024))
+                    break            
+            alice_measure, bob_measure = quantum_inspire.run_qi(a_basis, b_basis)
+            connection.sendall(pickle.dumps(a_basis))
+            clientDict[key].sendall(pickle.dumps(b_basis))
             # reply = get_result(data)
             # connection.sendall(str.encode(reply))
 
