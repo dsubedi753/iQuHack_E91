@@ -76,4 +76,6 @@ Our Network let's users connect to an interface server, which matches Users, who
 
 ## References
 
-- 
+- [The security analysis of E91 protocol in collective-rotation noise channel](https://journals.sagepub.com/doi/pdf/10.1177/1550147718778192)
+- [Quantum Cryptography Based on Bell's Theorem](http://www.physics.drexel.edu/~bob/Entanglement/Ekert_keydistribution.pdf)
+- [Quantum Inspire SDK](https://github.com/QuTech-Delft/quantuminspire)
