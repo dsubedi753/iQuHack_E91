@@ -29,6 +29,7 @@ for i in range(len(alice_bases)):
 
     circuit.h(q[0])
     circuit.cx(q[0], q[1])
+    circuit.x(q[1])
     
     if alice_bases[i] == '0':
         circuit.ry(-pi/2,q[0])
