@@ -49,8 +49,8 @@ Our Network let's users connect to an interface server, which matches Users, who
 1. Initiate Server
 ```python3 server_socket.py```
 
-2. Run gui.py. This is our client
-3. Input the server IP and port
+2. Run `gui.py` This is our client
+3. Input the server IP `127.0.0.1` and port `1233`
 4. Choose from one of the other clients to send the request
 5. After request is accepted, keys can be generated with given parameters
 
