@@ -41,11 +41,9 @@ def q_update(server_socket):
 def q_choose_user(server_socket, client_addr):
     server_socket.send(f"reqs {client_addr[0]}:{client_addr[1]}".encode())
     recv = server_socket.recv(1024).decode()
-    print(recv)
     if recv == "error":
         raise(Exception("unknown Error"))
     recv = server_socket.recv(1024).decode()
-    print(recv)
     return recv == "accepted"
 
 

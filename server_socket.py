@@ -26,7 +26,6 @@ def get_req(connection, cl_num):
     connection.send(pickle.dumps(reqDict[cl_num]))
     if reqDict[cl_num] is not None:
         ans = connection.recv(1024).decode("utf-8")
-        print(ans)
         acc = ans == "accept"
         for key, value in clientID.items():
             if str(value[0]) == str(reqDict[cl_num][0]) and str(value[1]) == str(reqDict[cl_num][1]):
