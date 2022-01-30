@@ -31,7 +31,8 @@ def q_update(server_socket):
     server_socket.send(str.encode("list"))
     client_list = pickle.load(server_socket.recv(4096).decode())
     server_socket.send(str.encode("request"))
-    requests = None
+    requests = pickle.load(server_socket.recv(4096).decode())
+    requests = None if requests[0] is None else requests
     return client_list, requests
 
 
@@ -53,7 +54,7 @@ def c_establish_connection(client_addr, own_addr, role):
                     break
                 return connection, client_socket
         else:
-            client_socket.connect(client_addr)
+            client_socket.connect((client_addr[0], PORT,))
             return client_socket, None
     except socket.error as e:
         print(str(e))
@@ -84,7 +85,7 @@ def e91protocol(bit_string_length, seed, rand_gen, server_socket, role, client_a
     decoy = []
     for (basis, other, result) in zip(basis_arr, other_basis_arr, results_arr):
         if basis == other:
-            key.append(result if role else (not result))
+            key.append(result)
         else:
             decoy.append(result)
     if role:
