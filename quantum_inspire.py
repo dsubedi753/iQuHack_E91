@@ -47,4 +47,4 @@ def run_qi(alice_bases, bob_bases):
             alice_measure.append(int(state[1]))
             bob_measure.append(int(state[0]))
 
-        return alice_measure, bob_measure
+    return alice_measure, bob_measure
