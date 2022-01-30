@@ -1,7 +1,7 @@
 # E91 Quantum Key Distribution Network
 Distributing Encryption Keys with QuTech hardware and an interface server
 
-**Team Members:** [Divyanshu Singh](https://github.com/divshacker), [Divas Subed](https://github.com/thunder753), [Kenneth Isamade](https://github.com/Isamade), [Paul Hermes](https://github.com/Loud-Echo)
+**Team Members:** [Divyanshu Singh](https://github.com/divshacker), [Divas Subedi](https://github.com/thunder753), [Kenneth Isamade](https://github.com/Isamade), [Paul Hermes](https://github.com/Loud-Echo)
 
 ## Abstract 
 This project is prepared as submission to iQuHack 2022. This project implements the E91 Quantum Key Distrbution Algorithm. The network artichecture is constructed using Python's socket. The quantum computation and measurement is carried out by Quantum Inspire from QuTech. Due to limitation, such as lack of quantum channel, the project implements workaround with assumption that some parts of the communication, which are simulated to be quantum channel, are secured. The project is expanded for multiple users to join the network such that any two user would be able to request interface server for generating keys. An applet is designed for Graphical User Interface, where a client would be able to view all other client in the network and pair up with one to request for keys.
