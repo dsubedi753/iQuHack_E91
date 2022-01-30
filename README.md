@@ -1,2 +1,2 @@
-# iQuHack_temp
-Implementation of E91
+# E91 Quantum Key Distribution Network
+Distributing Crypto Keys with QuTech hardware and an interface server
