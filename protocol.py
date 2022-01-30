@@ -28,16 +28,18 @@ def q_establish_connection(server_addr):
 
 
 def q_update(server_socket):
-    server_socket.send(str.encode("list"))
-    client_list = pickle.loads(server_socket.recv(4096))
     server_socket.send(str.encode("request"))
     requests = pickle.loads(server_socket.recv(4096))
+    server_socket.send(str.encode("list"))
+    client_list = pickle.loads(server_socket.recv(4096))
     return client_list, requests
 
 
 def q_choose_user(server_socket, client_addr):
     server_socket.send(f"reqs {client_addr[0]}:{client_addr[1]}".encode())
-    return server_socket.recv(1024).decode() == "accept"
+    if server_socket.recv(1024).decode() == "error":
+        raise(Exception("unknown Error"))
+    return server_socket.recv(1024).decode() == "accepted"
 
 
 def q_accept_user(server_socket, client_addr, accept):

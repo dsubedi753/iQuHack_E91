@@ -67,11 +67,11 @@ class App(tk.Frame):
         self.interface_frm.destroy()
         self.connection_frm = tk.Frame()
         self.connection_frm.grid(column=0, row=1, sticky=tk.W)
-        tk.Label(master=self.connection_frm, text=f"your IP: {own_addr[0]}:{own_addr[1]}")
+        tk.Label(master=self.connection_frm, text=f"your IP: {own_addr[0]}:{own_addr[1]}").grid(column=0, row=0)
         self.client_list = tk.Listbox(master=self.connection_frm, selectmode=tk.SINGLE)
-        self.client_list.grid(column=0, row=0, sticky=tk.W)
+        self.client_list.grid(column=0, row=1, sticky=tk.W)
         button_frm = tk.Frame(master=self.connection_frm)
-        button_frm.grid(column=0, row=1)
+        button_frm.grid(column=0, row=2)
         tk.Button(master=button_frm, text="update", command=self.update_users).\
             grid(column=0, row=0, sticky=tk.W)
         tk.Button(master=button_frm, text="choose", command=self.choose_user).\

@@ -24,17 +24,18 @@ def send_req(address, requester, connection):
 
 def get_req(connection, cl_num):
     connection.sendall(pickle.dumps(reqDict[cl_num]))
-    reqDict[cl_num] = None
-    ans = connection.recv(1024).decode("utf-8")
-    ans = ans[:5] == "accept"
-    client_address = ans[7:].split(":")
-    for key, value in clientID.items():
-        if str(value[0]) == str(client_address[0]) and str(value[1]) == str(client_address[1]):
-            if ans:
-                clientDict[key].sendall(str.encode("accepted"))
-            else:
-                clientDict[key].sendall(str.encode("rejected"))
-            break
+    if reqDict[cl_num] is not None:
+        reqDict[cl_num] = None
+        ans = connection.recv(1024).decode("utf-8")
+        ans = ans[:5] == "accept"
+        client_address = ans[7:].split(":")
+        for key, value in clientID.items():
+            if str(value[0]) == str(client_address[0]) and str(value[1]) == str(client_address[1]):
+                if ans:
+                    clientDict[key].sendall(str.encode("accepted"))
+                else:
+                    clientDict[key].sendall(str.encode("rejected"))
+                break
     
 
 def del_client(cl_num):
@@ -57,7 +58,7 @@ def threaded_client(connection, cl_num):
             if dat == "request":
                 get_req(connection, cl_num)
             # Make request
-            if "reqs" in dat:
+            if "reqs " in dat:
                 target_add = dat[5:]
                 send_req(target_add.split(":"), cl_num, connection)
         except e:
