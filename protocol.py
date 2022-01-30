@@ -1,33 +1,33 @@
-def q_establish_connection():  # True = Adam, False = Bob
+def q_establish_connection(server_addr, client_addr):  # True = Adam, False = Bob
     return True
 
 
-def q_send_basis(basis):
+def q_send_basis(server_socket, basis):
     pass
 
 
-def q_receive_result():
+def q_receive_result(server_socket):
     pass
 
 
-def c_establish_connection():
+def c_establish_connection(client_addr, role):
     pass
 
 
-def c_send_basis(basis_arr):
+def c_send_basis(client_socket, basis_arr):
     pass
 
 
-def c_receive_basis():
+def c_receive_basis(client_socket):
     return []
 
 
-def c_receive_decoy():
-    return []
-
-
-def c_send_decoy(decoy):
+def c_send_decoy(client_socket, decoy):
     pass
+
+
+def c_receive_decoy(client_socket):
+    return []
 
 
 def e91protocol(bit_string_length, seed, rand_gen, server_addr, client_addr):
