@@ -88,7 +88,7 @@ class App(tk.Frame):
                 app.role = False
                 app.client_addr = connection_req
                 app.draw_parameter_screen()
-                protocol.q_accept_user(app.server_socket, app.client_addr, True)
+                protocol.q_accept_user(app.server_socket, True)
                 popup.destroy()
 
             def refuse(app):

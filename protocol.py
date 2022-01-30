@@ -28,18 +28,18 @@ def q_establish_connection(server_addr):
 
 
 def q_update(server_socket):
-    server_socket.send(str.encode("request"))
+    server_socket.sendall(str.encode("request"))
     requests = pickle.loads(server_socket.recv(4096))
     if requests is not None:
         return [], requests
     else:
-        server_socket.send(str.encode("list"))
+        server_socket.sendall(str.encode("list"))
         client_list = pickle.loads(server_socket.recv(4096))
         return client_list, None
 
 
 def q_choose_user(server_socket, client_addr):
-    server_socket.send(f"reqs {client_addr[0]}:{client_addr[1]}".encode())
+    server_socket.sendall(f"reqs {client_addr[0]}:{client_addr[1]}".encode())
     recv = server_socket.recv(1024).decode()
     if recv == "error":
         raise(Exception("unknown Error"))
@@ -47,8 +47,16 @@ def q_choose_user(server_socket, client_addr):
     return recv == "accepted"
 
 
-def q_accept_user(server_socket, client_addr, accept):
-    server_socket.send(f"{'accept' if accept else 'refuse'}".encode())
+def q_accept_user(server_socket, accept):
+    server_socket.sendall(f"{'accept' if accept else 'refuse'}".encode())
+
+
+def send_own_ip(server_socket):
+    server_socket.send(str(own_ip()).encode())
+
+
+def receive_ip(server_socket):
+    server_socket.recv(1024).decode("utf-8")
 
 
 def c_establish_connection(client_addr, own_addr, role):
@@ -72,7 +80,9 @@ def c_establish_connection(client_addr, own_addr, role):
 
 
 def send_arr(connection, arr):
-    connection.send(pickle.dumps(arr))
+    print(arr)
+    print(pickle.dumps(arr))
+    connection.sendall(pickle.dumps(arr))
 
 
 def receive_arr(connection):
@@ -86,6 +96,8 @@ def e91protocol(bit_string_length, seed, rand_gen, server_socket, role, client_a
         basis_arr.append(rand_gen.choice([0, 1, 2] if role else [1, 2, 3]))
     send_arr(server_socket, (client_addr, basis_arr,))
     results_arr = receive_arr(server_socket)
+    send_own_ip(server_socket)
+    client_addr = (receive_ip(), PORT,)
     connection, client_socket = c_establish_connection(client_addr, (own_ip(), PORT), role)
     if role:
         send_arr(connection, basis_arr)

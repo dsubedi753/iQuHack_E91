@@ -23,7 +23,7 @@ def send_req(address, requester, connection):
 
 
 def get_req(connection, cl_num):
-    connection.send(pickle.dumps(reqDict[cl_num]))
+    connection.sendall(pickle.dumps(reqDict[cl_num]))
     if reqDict[cl_num] is not None:
         ans = connection.recv(1024).decode("utf-8")
         acc = ans == "accept"
@@ -67,6 +67,10 @@ def threaded_client(connection, cl_num):
                     measure_0, measure_1 = quantum_inspire.run_qi(basis_0, basis_1)
                     connection.sendall(pickle.dumps(measure_0))
                     clientDict[key].sendall(pickle.dumps(measure_1))
+                    actual_ip_0 = connection.recv(1024)
+                    actual_ip_1 = clientDict[key].recv(1024)
+                    connection.sendall(actual_ip_1)
+                    clientDict[key].sendall(actual_ip_0)
                     break
     connection.close()
 
@@ -91,7 +95,7 @@ if __name__ == "__main__":
     while True:
         Client, address = ServerSocket.accept()
         print('Connected to: ' + address[0] + ':' + str(address[1]))
-        Client.send(pickle.dumps((address[0], address[1],)))
+        Client.sendall(pickle.dumps((address[0], address[1],)))
         ThreadCount += 1
         clientID[ThreadCount] = (address[0], address[1], )
         reqDict[ThreadCount] = None
