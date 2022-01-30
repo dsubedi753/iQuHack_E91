@@ -45,7 +45,7 @@ def run_qi(alice_bases, bob_bases)
         job = execute(circuit, backend=qi_backend, shots=1)
         result = job.result().get_counts(circuit)
         for state, counts in result.items():
-            alice_measure.append(state[1])
-            bob_measure.append(state[0])
+            alice_measure.append(int(state[1]))
+            bob_measure.append(int(state[0]))
 
         return alice_measure, bob_measure
