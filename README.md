@@ -13,7 +13,7 @@ It achieves this by sending the key encoded in random basis and then, after the 
 ### E91
 E91 was another Algorithm proposed for secure transmission of a key using a combination of a quantum and classical channel.
 It uses works by sending two entangled particles (we'll use 
-<img src="https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1$|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle+|11\rangle)$">
+<img src="https://render.githubusercontent.com/render/math?math=|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle+|11\rangle)">
 ) to both Alice and Bob and measuring them in random basis. Alice can measure in the normal X-Basis of $\{|0\rangle, |1\rangle\}$ (called $a_1$) as well as that basis rotated by $\frac{1}{4}\pi$ ($a_2$) and $\frac{1}{2}\pi$ ($a_3$). Bob can measure in the X-basis rotated by $\frac{1}{4}\pi$ ($b_1$), $\frac{1}{2}\pi$ ($b_2$) and $\frac{3}{4}\pi$ ($b_3$).
 Alice and Bob then both release the Basis they used and compare where they used the same basis (the X-Basis rotated around the same angle) and where they differed. The ones they agree on should have exactly opposite results. The ones where they differed validate the exchange.
 
